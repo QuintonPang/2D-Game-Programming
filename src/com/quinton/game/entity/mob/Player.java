@@ -1,6 +1,9 @@
-package com.quinton.game.mob.entity.mob;
+package com.quinton.game.entity.mob;
+
+import java.util.List;
 
 import com.quinton.game.Game;
+import com.quinton.game.entity.Entity;
 import com.quinton.game.entity.projectile.Projectile;
 import com.quinton.game.entity.projectile.WizardProjectile;
 import com.quinton.game.graphics.AnimatedSprite;
@@ -47,29 +50,35 @@ public class Player extends Mob {
 	
 	public void update() {
 		
+		// get entities near the player
+		List<Entity> es = level.getEntities(this,20);
+		//System.out.println(es.size());
+		//for (Entity e:es) System.out.println(e);
+		
 		//test.update();
 		if(walking) animSprite.update();
 		//reset frame after player stops
 		else animSprite.setFrame(0);
 		if(fireRate>0) fireRate--;
-		int xa = 0, ya = 0;
+		double xa = 0, ya = 0;
+		double speed = 0.5;
 		//reset anim if too long
 		if(anim<7500) anim++;
 		else anim = 0;
 		if (input.up) { 
-			ya--;
+			ya-=speed;
 			animSprite = up;	
 		}
 		if (input.down) {
-			ya++;
+			ya+=speed;
 			animSprite = down;
 		}
 		if (input.left) {
-			xa--;
+			xa-=speed;
 			animSprite = left;
 		}
 		if(input.right) {
-			xa++;
+			xa+=speed;
 			animSprite = right;
 		}
 		
@@ -146,7 +155,7 @@ public class Player extends Mob {
 		*/
 		//sprite = test.getSprite();
 		sprite = animSprite.getSprite();
-		screen.renderMob(x - 16, y -16, sprite, flip);
+		screen.renderMob((int)(x - 16),(int)( y -16), sprite, flip);
 		
 	}
 	

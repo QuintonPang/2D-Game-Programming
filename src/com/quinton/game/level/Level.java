@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.quinton.game.entity.Entity;
+import com.quinton.game.entity.mob.Player;
 import com.quinton.game.entity.particle.Particle;
 import com.quinton.game.entity.projectile.Projectile;
 import com.quinton.game.entity.spawner.Spawner;
@@ -21,6 +22,7 @@ public class Level {
 	protected List<Entity> entities = new ArrayList<Entity>();
 	private List<Projectile> projectiles = new ArrayList<Projectile>();
 	private List<Particle> particles = new ArrayList<Particle>();
+	private List<Player> players = new ArrayList<Player>();
 	
 	//public static Level level = new Level("/textures/levels/level.png");
 	public static Level spawn = new SpawnLevel("/textures/levels/spawn.png");
@@ -91,6 +93,9 @@ public class Level {
 		for(int i = 0; i < particles.size(); i++) {
 			particles.get(i).update();
 		}
+		for(int i = 0; i < players.size(); i++) {
+			players.get(i).update();
+		}
 
 		remove();
 	}
@@ -106,6 +111,9 @@ public class Level {
 
 		for(int i = 0; i < particles.size(); i++) {
 			if (particles.get(i).isRemoved()) particles.remove(i);
+		}
+		for(int i = 0; i < players.size(); i++) {
+			if (players.get(i).isRemoved()) players.remove(i);
 		}
 	}
 
@@ -153,6 +161,9 @@ public class Level {
 		for(int i = 0; i< particles.size(); i++) {
 			particles.get(i).render(screen);
 		}
+		for(int i = 0; i< players.size(); i++) {
+			players.get(i).render(screen);
+		}
 	}
 	
 	
@@ -166,6 +177,9 @@ public class Level {
 		}else if(e instanceof Projectile) {
 			
 			projectiles.add((Projectile) e);
+		}else if(e instanceof Player) {
+			
+			players.add((Player) e);
 		}else {
 			entities.add(e);
 		}
@@ -210,5 +224,58 @@ public class Level {
 		// if blank
 		return Tile.voidTile;
 		
+	}
+	
+	public List<Player>getPlayer() {
+		return players;
+	}
+	
+	public Player getPlayer(int index) {
+		return players.get(index);
+	}
+	
+	// get first player
+	public Player getClientPlayer() {
+		return players.get(0);
+	}
+	
+	// find nearby entities
+	public List<Entity>getEntities(Entity e, int radius){
+		List<Entity> result = new ArrayList<Entity>();
+		int ex = (int)e.getX();
+		int ey = (int)e.getY();
+		for (int i=0; i<entities.size();i++) {
+			Entity entity = entities.get(i);
+			int x = (int)entity.getX();
+			int y = (int)entity.getY();
+			
+			// get distance from mob to player
+			int dx = Math.abs(x-ex);
+			int dy = Math.abs(y-ey);
+			double dist = Math.sqrt(dx*dx + dy *dy);
+			if (dist<=radius) result.add(entity);
+		}
+		
+		return result;
+	}
+	// find nearby players
+	public List<Player> getPlayers(Entity e, int radius){
+		List<Player> result = new ArrayList<Player>();
+		
+		for (int i =0;i<players.size();i++) {
+			Player player = players.get(i);
+			int x = (int)player.getX();
+			int y =(int) player.getY();
+			
+			int ex = (int)e.getX();
+			int ey = (int)e.getY();
+			// get distance from mob to player
+			int dx = Math.abs(x-ex);
+			int dy = Math.abs(y-ey);
+			double dist = Math.sqrt(dx*dx + dy *dy);
+			if (dist<=radius) result.add(player);
+
+		}
+		return result;
 	}
 }

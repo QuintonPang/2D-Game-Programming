@@ -13,6 +13,7 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
+import com.quinton.game.entity.mob.Player;
 import com.quinton.game.graphics.Screen;
 import com.quinton.game.graphics.Sprite;
 import com.quinton.game.graphics.SpriteSheet;
@@ -22,7 +23,6 @@ import com.quinton.game.level.Level;
 import com.quinton.game.level.RandomLevel;
 import com.quinton.game.level.SpawnLevel;
 import com.quinton.game.level.TileCoordinate;
-import com.quinton.game.mob.entity.mob.Player;
 
 
 
@@ -85,9 +85,10 @@ public class Game extends Canvas implements Runnable{
 		//level = new RandomLevel(64,64);
 		level = Level.spawn;
 		// set spawn location
-		TileCoordinate playerSpawn = new TileCoordinate(19,62);
+		TileCoordinate playerSpawn = new TileCoordinate(19,42);
 		player = new Player(playerSpawn.x(),playerSpawn.y(),key);
-		player.init(level);
+		//player.init(level);
+		level.add(player);
 		addKeyListener(key);
 		
 		Mouse mouse = new Mouse();
@@ -194,11 +195,15 @@ public class Game extends Canvas implements Runnable{
 		screen.clear();
 		
 		//set view of player in middle of the screen by moving the map to the left and downwards without affecting postion of player on the map
-		int xScroll = player.x - screen.width/2;
-		int yScroll = player.y - screen.height/2;
+		//int xScroll = player.x - screen.width/2;
+		//int yScroll = player.y - screen.height/2;
 		
-		level.render(xScroll,yScroll, screen);
-		player.render(screen);
+		double xScroll = player.getX() - screen.width/2;
+		double yScroll = player.getY() - screen.height/2;
+
+		
+		level.render((int)xScroll,(int)yScroll, screen);
+		//player.render(screen);
 		//screen.renderSheet(40, 40, SpriteSheet.player_down, false);
 		/*
 		Sprite sprite = new Sprite(2,2,0xffffff);
@@ -232,7 +237,7 @@ public class Game extends Canvas implements Runnable{
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Verdana",0,30));
 		//g.fillRect(Mouse.getX() - 32, Mouse.getY() - 32, 64, 64);
-		g.drawString("X:" + player.x + " Y: " + player.y, 675, 450);
+		g.drawString("X:" + player.getX() + " Y: " + player.getY(), 675, 450);
 		//g.drawString("Mouse Button: " + Mouse.getButton(), 100, 100);
 		
 		//removes the graphics every loop
@@ -251,7 +256,7 @@ public class Game extends Canvas implements Runnable{
 		if(key.right) x++;
 		*/
 		
-		player.update();
+		//player.update();
 		level.update();
 	}
 

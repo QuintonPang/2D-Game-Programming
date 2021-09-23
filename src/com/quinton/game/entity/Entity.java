@@ -3,11 +3,13 @@ package com.quinton.game.entity;
 import java.util.Random;
 
 import com.quinton.game.graphics.Screen;
+import com.quinton.game.graphics.Sprite;
 import com.quinton.game.level.Level;
 
 public abstract class Entity {
 	
-	public int x,y;
+	protected double x,y;
+	protected Sprite sprite;
 	private boolean removed = false;
 	protected Level level;
 	protected final Random random = new Random();
@@ -16,8 +18,20 @@ public abstract class Entity {
 		
 	}
 	
+	public double getX() {
+		return x;
+	}
+	
+	public double getY() {
+		return y;
+	}
+	
 	public void render(Screen screen) {
-		
+		if (sprite!=null) screen.renderSprite((int) x, (int) y, sprite, true);
+	}
+	
+	public Sprite getSprite() {
+		return sprite;
 	}
 	
 	//remove entity from level

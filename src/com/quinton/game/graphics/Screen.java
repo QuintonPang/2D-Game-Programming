@@ -2,6 +2,8 @@ package com.quinton.game.graphics;
 
 import java.util.Random;
 
+import com.quinton.game.entity.mob.Chaser;
+import com.quinton.game.entity.mob.Mob;
 import com.quinton.game.entity.projectile.Projectile;
 import com.quinton.game.level.tile.Tile;
 
@@ -146,6 +148,36 @@ public void renderMob(int xp, int yp, Sprite sprite, int flip) {
 				if (color!=0xffff00ff) pixels[xa+ya*width] = color;
 				
 
+		
+			}
+		}
+	}
+
+	// for chaser
+	public void renderChaser(int d, int e, Mob mob) {
+		
+		//replacing location of tiles following movement of player
+		d-=xOffset;
+		e-=yOffset;
+		
+		for(int y=0;y<32;y++) {
+			//absolute position of sprite
+			int ya = y+e;
+			int ys = y;
+			
+			for(int x=0;x<32;x++) {
+				int xa = x+d;
+				int xs = x;
+
+				if(xa<-32||xa>=width||ya<0||ya>=height) break;
+				if(xa<0) xa=0;
+				int color = mob.getSprite().pixels[xs+ys*32];
+				//changes blue color to red color
+				if (mob instanceof Chaser && color == 0xff472BBF ) color = 0xffBA0015;
+				// removes pink background of player
+				if (color!=0xffff00ff) pixels[xa+ya*width] = color;
+				
+	
 		
 			}
 		}
