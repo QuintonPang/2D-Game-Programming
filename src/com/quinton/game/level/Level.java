@@ -12,7 +12,7 @@ import com.quinton.game.entity.projectile.Projectile;
 import com.quinton.game.entity.spawner.Spawner;
 import com.quinton.game.graphics.Screen;
 import com.quinton.game.level.tile.Tile;
-import com.quinton.util.Vector2i;
+import com.quinton.game.util.Vector2i;
 
 public class Level {
 	

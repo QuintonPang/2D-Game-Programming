@@ -1,6 +1,6 @@
 package com.quinton.game.level;
 
-import com.quinton.util.Vector2i;
+import com.quinton.game.util.Vector2i;
 
 public class Node {
 

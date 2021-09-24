@@ -1,4 +1,4 @@
-package com.quinton.util;
+package com.quinton.game.util;
 
 // A* STAR SEARCH ALGORITHM
 // 2 means two coordinates, i means return integer

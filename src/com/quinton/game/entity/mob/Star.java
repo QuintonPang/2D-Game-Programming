@@ -8,7 +8,7 @@ import com.quinton.game.graphics.Screen;
 import com.quinton.game.graphics.Sprite;
 import com.quinton.game.graphics.SpriteSheet;
 import com.quinton.game.level.Node;
-import com.quinton.util.Vector2i;
+import com.quinton.game.util.Vector2i;
 
 public class Star extends Mob {
 
