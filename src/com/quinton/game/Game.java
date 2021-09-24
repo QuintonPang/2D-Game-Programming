@@ -237,7 +237,7 @@ public class Game extends Canvas implements Runnable{
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("Verdana",0,30));
 		//g.fillRect(Mouse.getX() - 32, Mouse.getY() - 32, 64, 64);
-		g.drawString("X:" + player.getX() + " Y: " + player.getY(), 675, 450);
+		g.drawString("X:" + (int)player.getX() + " Y: " + (int)player.getY(), 675, 450);
 		//g.drawString("Mouse Button: " + Mouse.getButton(), 100, 100);
 		
 		//removes the graphics every loop

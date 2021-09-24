@@ -99,9 +99,12 @@ public abstract class Mob extends Entity {
 	public abstract void update();
 	
 	protected void shoot (double x, double y, double dir) {
+		
 		//dir = Math.toDegrees(dir);
 		//System.out.println("Angle: " + dir);
+		
 		Projectile p = new WizardProjectile(x,y,dir);
+		level.add(p);
 		//projectiles.add(p); 
 		
 	}
@@ -114,9 +117,9 @@ public abstract class Mob extends Entity {
 		for(int c=0;c<4;c++) {
 			//check corners
 			//width of collision area
-			double xt = ((x + xa -16) + c % 2* 8) / 16;
+			double xt = ((x + xa ) - c % 2* 15) / 16;
 			//height of collision area
-			double yt = ((y + ya - 16) + c / 2 * 8) / 16;
+			double yt = ((y + ya ) - c / 2 * 15) / 16;
 			
 			// convert to integer
 			int ix = (int) Math.ceil(xt); //rounds off the number

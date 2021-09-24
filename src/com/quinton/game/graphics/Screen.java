@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.quinton.game.entity.mob.Chaser;
 import com.quinton.game.entity.mob.Mob;
+import com.quinton.game.entity.mob.Star;
 import com.quinton.game.entity.projectile.Projectile;
 import com.quinton.game.level.tile.Tile;
 
@@ -174,6 +175,7 @@ public void renderMob(int xp, int yp, Sprite sprite, int flip) {
 				int color = mob.getSprite().pixels[xs+ys*32];
 				//changes blue color to red color
 				if (mob instanceof Chaser && color == 0xff472BBF ) color = 0xffBA0015;
+				if (mob instanceof Star && color == 0xff472BBF) color = 0xffE8E83A; // darkish yellow color
 				// removes pink background of player
 				if (color!=0xffff00ff) pixels[xa+ya*width] = color;
 				

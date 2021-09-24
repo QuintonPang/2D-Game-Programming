@@ -44,6 +44,7 @@ public class WizardProjectile extends Projectile{
 		
 		x += nx;
 		y += ny;
+
 		
 		//System.out.println(distance());
 		if(distance()>range) remove();
@@ -57,6 +58,7 @@ public class WizardProjectile extends Projectile{
 	}
 
 	public void render(Screen screen) {
+		
 		screen.renderProjectile((int)x-12,(int)y-2,this);
 	}
 

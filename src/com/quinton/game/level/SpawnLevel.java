@@ -7,6 +7,8 @@ import javax.imageio.ImageIO;
 
 import com.quinton.game.entity.mob.Chaser;
 import com.quinton.game.entity.mob.Dummy;
+import com.quinton.game.entity.mob.Shooter;
+import com.quinton.game.entity.mob.Star;
 import com.quinton.game.level.tile.Tile;
 
 public class SpawnLevel extends Level{
@@ -37,15 +39,18 @@ public class SpawnLevel extends Level{
 		
 			}
 			
-			/*
-			for (int i =0;i<5;i++) {
-				add(new Dummy(20,55));
-			}
-			*/
 			
-			for (int i =0;i<1;i++) {
-				add(new Chaser(20,55));
+			for (int i =0;i<5;i++) {
+				add(new Dummy(20,65));
 			}
+			
+			
+			add(new Star(17, 50));
+			
+			add(new Chaser(20,55));
+			
+			add(new Shooter(20,55));
+			
 	
 			
 			
