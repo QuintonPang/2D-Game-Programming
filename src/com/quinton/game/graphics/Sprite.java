@@ -98,7 +98,14 @@ public class Sprite {
 		SIZE = width==height?width:-1;
 		this.width = width;
 		this.height = height;
-		this.pixels = pixels;
+		this.pixels = new int[width * height];
+		
+		// forces new pixels to be created instead of being referenced to the same memory address
+		//for(int i = 0;i<pixels.length;i++) this.pixels[i] = pixels[i];
+		
+		// same effect
+		System.arraycopy(pixels, 0, this.pixels, 0, pixels.length);
+		//this.pixels = pixels;
 
 	}
 	
@@ -114,7 +121,7 @@ public class Sprite {
 		for (int y=0; y<height;y++) {
 			
 			for (int x=0; x<width; x++) {
-				pixels[x+y*width] = sheet.pixels[(x+this.x)+(y + this.y ) *sheet.WIDTH];
+				pixels[x+y*width] = sheet.pixels[(x+this.x)+(y + this.y ) *sheet.SPRITE_WIDTH];
 			
 			}
 		}
@@ -127,5 +134,34 @@ public class Sprite {
 	
 	public int getHeight() {
 		return height;
+	}
+	
+	public static Sprite[] split(SpriteSheet sheet) {
+		 int amount = (sheet.getWidth() * sheet.getHeight()) / (sheet.SPRITE_WIDTH * sheet.SPRITE_HEIGHT);
+		 Sprite[] sprites = new Sprite[amount];
+		 
+		 int[] pixels = new int[sheet.SPRITE_WIDTH*sheet.SPRITE_HEIGHT];
+		 int current = 0;
+		 
+		 for (int yp = 0; yp<sheet.getHeight()/sheet.SPRITE_HEIGHT;yp++) {
+			 for(int xp = 0; xp<sheet.getWidth()/sheet.SPRITE_WIDTH;xp++) {
+				 //gets a sprite
+				 
+				 for(int y=0;y<sheet.SPRITE_HEIGHT;y++) {
+					 for(int x=0; x<sheet.SPRITE_WIDTH;x++) {
+						 // gets pixels of a sprite
+						 int xo = x + xp * sheet.SPRITE_WIDTH;
+						 int yo = y + yp * sheet.SPRITE_HEIGHT;
+		
+						 pixels[x+y*sheet.SPRITE_WIDTH] = sheet.getPixels()[xo + yo * sheet.getWidth()];
+					 }
+				 }
+			 
+				 sprites[current++]=new Sprite(pixels,sheet.SPRITE_WIDTH,sheet.SPRITE_HEIGHT);
+			 
+			 }
+		 }
+		 
+		 return sprites;
 	}
 }

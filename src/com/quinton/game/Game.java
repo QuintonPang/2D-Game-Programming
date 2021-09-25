@@ -4,7 +4,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 //import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
+//import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 
 import com.quinton.game.entity.mob.Player;
 import com.quinton.game.graphics.Screen;
+import com.quinton.game.graphics.Font;
 import com.quinton.game.graphics.Sprite;
 import com.quinton.game.graphics.SpriteSheet;
 import com.quinton.game.input.Keyboard;
@@ -49,6 +50,7 @@ public class Game extends Canvas implements Runnable{
 	private Player player;
 	
 	private Screen screen;
+	private Font font;
 
 	//  image
 	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -84,6 +86,8 @@ public class Game extends Canvas implements Runnable{
 		// 64 by 64
 		//level = new RandomLevel(64,64);
 		level = Level.spawn;
+		font = new Font();
+		
 		// set spawn location
 		TileCoordinate playerSpawn = new TileCoordinate(19,42);
 		player = new Player(playerSpawn.x(),playerSpawn.y(),key);
@@ -216,6 +220,7 @@ public class Game extends Canvas implements Runnable{
 		*/
 		
 		//screen.render(x,y);
+		font.render(screen);
 		
 		for (int i=0;i<pixels.length;i++) {
 			//setting the pixels array to the pixels array in screen class
@@ -235,7 +240,7 @@ public class Game extends Canvas implements Runnable{
 		
 		//coordinates on screen
 		g.setColor(Color.WHITE);
-		g.setFont(new Font("Verdana",0,30));
+		//g.setFont(new Font("Verdana",0,30));
 		//g.fillRect(Mouse.getX() - 32, Mouse.getY() - 32, 64, 64);
 		g.drawString("X:" + (int)player.getX() + " Y: " + (int)player.getY(), 675, 450);
 		//g.drawString("Mouse Button: " + Mouse.getButton(), 100, 100);
