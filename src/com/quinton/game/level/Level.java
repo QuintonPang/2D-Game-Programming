@@ -9,6 +9,7 @@ import com.quinton.game.entity.Entity;
 import com.quinton.game.entity.mob.Player;
 import com.quinton.game.entity.particle.Particle;
 import com.quinton.game.entity.projectile.Projectile;
+import com.quinton.game.entity.spawner.ParticleSpawner;
 import com.quinton.game.entity.spawner.Spawner;
 import com.quinton.game.graphics.Screen;
 import com.quinton.game.level.tile.Tile;
@@ -261,8 +262,13 @@ public class Level {
 		int ey = (int)e.getY();
 		for (int i=0; i<entities.size();i++) {
 			Entity entity = entities.get(i);
+			// preventing from returning itself
+			if(entity.equals(e)) continue;
 			int x = (int)entity.getX();
 			int y = (int)entity.getY();
+			
+			// prevent from getting particles
+			if(entity instanceof ParticleSpawner) continue;
 			
 			// get distance from mob to player
 			int dx = Math.abs(x-ex);

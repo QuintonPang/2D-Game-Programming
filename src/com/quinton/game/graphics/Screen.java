@@ -239,4 +239,31 @@ public void renderMob(int xp, int yp, Sprite sprite, int flip) {
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 	}
+
+	
+	public void drawRect(int xp, int yp, int width, int height,int color, boolean fixed) {
+		
+		
+		if (fixed) {
+			xp-=xOffset;
+			yp-=yOffset;
+		}
+		
+		// horizontal line
+		for (int x=xp;x<xp+width;x ++) {
+			if(yp>=this.height||x<0||x>=this.width) continue;
+			if (yp>0)pixels[x + yp  * this.width] = color;
+			if(yp+height>=this.height) continue;
+			if(yp+height>0)pixels[x +  (yp+height) * this.width] = color;
+		}
+		// vertical line
+		for (int y=yp;y<=yp+height;y++) {
+			if(xp>=this.width||y<0||y>=this.height) continue;
+			if(xp>0) pixels[xp +  y * this.width] = color;
+			if(xp+width>=this.width) continue;
+			if(xp+width>0)pixels[(xp + width) + y *this.width] = color;
+		}
+		
+		
+	}
 }

@@ -58,6 +58,13 @@ public class Vector2i {
 		return this;
 	}
 	
+	// distance between two vectors
+	public static double getDistance(Vector2i v0, Vector2i v1) {
+		double x = v0.getX() - v1.getX();
+		double y = v0.getY() - v1.getY();
+		return Math.sqrt(x*x + y*y);
+		}
+	
 	public int getX() {
 		return x;
 	}
@@ -66,3 +73,4 @@ public class Vector2i {
 		return y;
 	}
 }
+ 
