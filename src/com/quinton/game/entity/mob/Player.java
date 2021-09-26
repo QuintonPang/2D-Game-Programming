@@ -10,6 +10,7 @@ import com.quinton.game.graphics.AnimatedSprite;
 import com.quinton.game.graphics.Screen;
 import com.quinton.game.graphics.Sprite;
 import com.quinton.game.graphics.SpriteSheet;
+import com.quinton.game.graphics.UIManager;
 import com.quinton.game.input.Keyboard;
 import com.quinton.game.input.Mouse;
 import com.quinton.game.level.Level;
@@ -32,6 +33,8 @@ public class Player extends Mob {
 	Projectile p;
 	private int fireRate = 0;
 	
+	private UIManager uiManager;
+	
 	//player spawned at specific location
 	public Player(int x, int y, Keyboard input) {
 		this.x = x;
@@ -41,6 +44,7 @@ public class Player extends Mob {
 		sprite = Sprite.player_forward;
 		animSprite = down;
 		fireRate = WizardProjectile.FIRE_RATE;
+		uiManager = Game.getUIManager();
 	}
 	
 	//player spawned at default location

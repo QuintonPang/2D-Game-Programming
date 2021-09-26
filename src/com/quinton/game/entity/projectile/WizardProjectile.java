@@ -18,12 +18,14 @@ public class WizardProjectile extends Projectile{
 		speed = 4;
 		damage = 20;
 		//rateOfFire = 15; //time between projectiles
-		sprite = Sprite.projectile_wizard;
+		sprite = Sprite.rotate(Sprite.projectile_arrow,angle);
 		
 		// vector
 		nx = speed * Math.cos(angle);
 		ny = speed * Math.sin(angle);
 	}
+	
+	private int time = 0;
 	
 	public void update() {
 		if (level.tileCollision((int)(x + nx) , (int)(y + ny), 6, 4 , 4)) {
@@ -34,6 +36,10 @@ public class WizardProjectile extends Projectile{
 			//level.add(p);
 		}
 		move();
+		time++;
+		if (time%2==0) {
+			sprite = Sprite.rotate(sprite, Math.PI/20.0);
+		}
 	}
 	
 	public void move() {
@@ -59,6 +65,7 @@ public class WizardProjectile extends Projectile{
 
 	public void render(Screen screen) {
 		
+		//screen.renderProjectile((int)x-12,(int)y-2,this);
 		screen.renderProjectile((int)x-12,(int)y-2,this);
 	}
 

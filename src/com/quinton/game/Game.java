@@ -18,6 +18,7 @@ import com.quinton.game.graphics.Screen;
 import com.quinton.game.graphics.Font;
 import com.quinton.game.graphics.Sprite;
 import com.quinton.game.graphics.SpriteSheet;
+import com.quinton.game.graphics.UIManager;
 import com.quinton.game.input.Keyboard;
 import com.quinton.game.input.Mouse;
 import com.quinton.game.level.Level;
@@ -51,6 +52,8 @@ public class Game extends Canvas implements Runnable{
 	
 	private Screen screen;
 	private Font font;
+	
+	private static UIManager uiManager;
 
 	//  image
 	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -87,6 +90,7 @@ public class Game extends Canvas implements Runnable{
 		//level = new RandomLevel(64,64);
 		level = Level.spawn;
 		font = new Font();
+		uiManager = new UIManager();
 		
 		// set spawn location
 		TileCoordinate playerSpawn = new TileCoordinate(19,42);
@@ -111,6 +115,10 @@ public class Game extends Canvas implements Runnable{
 	
 	public static int getWindowHeight() {
 		return height * scale;
+	}
+	
+	public static UIManager getUIManager() {
+		return uiManager;
 	}
 
 	//synchronized means it runs individually to prevent interruption
@@ -220,8 +228,8 @@ public class Game extends Canvas implements Runnable{
 		*/
 		
 		//screen.render(x,y);
-		font.render(screen);
-		
+		font.render(50,50,-3,0xffffff,"“Hello\n Quinton ”",screen);
+		uiManager.update();
 		for (int i=0;i<pixels.length;i++) {
 			//setting the pixels array to the pixels array in screen class
 			pixels[i]= screen.pixels[i];
@@ -263,6 +271,7 @@ public class Game extends Canvas implements Runnable{
 		
 		//player.update();
 		level.update();
+		uiManager.update();
 	}
 
 }
