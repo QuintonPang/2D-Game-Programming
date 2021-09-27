@@ -19,6 +19,7 @@ import com.quinton.game.graphics.Font;
 import com.quinton.game.graphics.Sprite;
 import com.quinton.game.graphics.SpriteSheet;
 import com.quinton.game.graphics.UIManager;
+import com.quinton.game.graphics.ui.UIPanel;
 import com.quinton.game.input.Keyboard;
 import com.quinton.game.input.Mouse;
 import com.quinton.game.level.Level;
@@ -37,8 +38,10 @@ public class Game extends Canvas implements Runnable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private static int width =300;
-	private static int height = width/16 * 9; // ratio of 9:16
+	//private static int width =300;
+	private static int width = 300 - 80;
+	private static int height = 168;
+	//private static int height = width/16 * 9; // ratio of 9:16
 	private static int scale =3;
 	
 	int x, y =0;
@@ -79,7 +82,8 @@ public class Game extends Canvas implements Runnable{
 	//constructor of game
 	public Game() {
 		
-		Dimension size = new Dimension(width*scale, height*scale);
+		//Dimension size = new Dimension(width*scale, height*scale);
+		Dimension size = new Dimension(width*scale + 80 * 3, height*scale);
 		setPreferredSize(size);
 				
 		//initialize local variable frame4
@@ -91,10 +95,9 @@ public class Game extends Canvas implements Runnable{
 		level = Level.spawn;
 		font = new Font();
 		uiManager = new UIManager();
-		
 		// set spawn location
 		TileCoordinate playerSpawn = new TileCoordinate(19,42);
-		player = new Player(playerSpawn.x(),playerSpawn.y(),key);
+		player = new Player("Quinton",playerSpawn.x(),playerSpawn.y(),key);
 		//player.init(level);
 		level.add(player);
 		addKeyListener(key);
@@ -215,6 +218,7 @@ public class Game extends Canvas implements Runnable{
 
 		
 		level.render((int)xScroll,(int)yScroll, screen);
+		//uiManager.render(screen);
 		//player.render(screen);
 		//screen.renderSheet(40, 40, SpriteSheet.player_down, false);
 		/*
@@ -228,8 +232,8 @@ public class Game extends Canvas implements Runnable{
 		*/
 		
 		//screen.render(x,y);
-		font.render(50,50,-3,0xffffff,"“Hello\n Quinton ”",screen);
-		uiManager.update();
+		//font.render(50,50,-3,0xffffff,"“Hello\n Quinton ”",screen);
+	
 		for (int i=0;i<pixels.length;i++) {
 			//setting the pixels array to the pixels array in screen class
 			pixels[i]= screen.pixels[i];
@@ -237,14 +241,21 @@ public class Game extends Canvas implements Runnable{
 			//System.out.println(pixels[i]);
 		}
 		
+		
+		
 		//Draw the graphics
 		Graphics g = bs.getDrawGraphics();
 
+		// to check holes on screen
+		g.setColor(new Color(0xff00ff));
+		g.drawRect(0,0,getWidth(),getHeight());
+		
 		/*g.setColor(Color.BLACK);
 		g.fillRect(0, 0, getWidth(), getHeight()); */
 		
 		//draw buffered image
-		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+		//g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
+		g.drawImage(image, 0, 0, width*scale , height*scale, null);
 		
 		//coordinates on screen
 		g.setColor(Color.WHITE);
@@ -252,6 +263,8 @@ public class Game extends Canvas implements Runnable{
 		//g.fillRect(Mouse.getX() - 32, Mouse.getY() - 32, 64, 64);
 		g.drawString("X:" + (int)player.getX() + " Y: " + (int)player.getY(), 675, 450);
 		//g.drawString("Mouse Button: " + Mouse.getButton(), 100, 100);
+		
+		uiManager.render(g);
 		
 		//removes the graphics every loop
 		g.dispose();

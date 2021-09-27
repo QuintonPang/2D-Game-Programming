@@ -1,9 +1,11 @@
 package com.quinton.game.entity.mob;
 
-import java.util.List;
+import java.awt.Color;
+//import java.util.List;
+import java.awt.Font;
 
 import com.quinton.game.Game;
-import com.quinton.game.entity.Entity;
+//import com.quinton.game.entity.Entity;
 import com.quinton.game.entity.projectile.Projectile;
 import com.quinton.game.entity.projectile.WizardProjectile;
 import com.quinton.game.graphics.AnimatedSprite;
@@ -11,9 +13,13 @@ import com.quinton.game.graphics.Screen;
 import com.quinton.game.graphics.Sprite;
 import com.quinton.game.graphics.SpriteSheet;
 import com.quinton.game.graphics.UIManager;
+import com.quinton.game.graphics.ui.UILabel;
+import com.quinton.game.graphics.ui.UIPanel;
+import com.quinton.game.graphics.ui.UIProgressBar;
 import com.quinton.game.input.Keyboard;
 import com.quinton.game.input.Mouse;
 import com.quinton.game.level.Level;
+import com.quinton.game.util.Vector2i;
 
 public class Player extends Mob {
 	
@@ -33,10 +39,14 @@ public class Player extends Mob {
 	Projectile p;
 	private int fireRate = 0;
 	
-	private UIManager uiManager;
+	private UIManager ui; 
+	private UIProgressBar uiHealthBar;
+	
+	private String name;
 	
 	//player spawned at specific location
-	public Player(int x, int y, Keyboard input) {
+	public Player(String name, int x, int y, Keyboard input) {
+		this.name = name;
 		this.x = x;
 		this.y = y;
 		this.input = input;
@@ -44,18 +54,44 @@ public class Player extends Mob {
 		sprite = Sprite.player_forward;
 		animSprite = down;
 		fireRate = WizardProjectile.FIRE_RATE;
-		uiManager = Game.getUIManager();
+		ui = Game.getUIManager();
+		//UIPanel panel = new UIPanel(new Vector2i(300-80,  0));
+		UIPanel panel = (UIPanel) new UIPanel(new Vector2i((300-80)*3,  0), new Vector2i(80*3, 168*3)).setColor(0x4f4f4f);
+		ui.addPanel(panel);
+		//panel.addComponent(new UILabel(new Vector2i(10,38) , "Hello"));
+		
+		UILabel nameLabel = new UILabel(new Vector2i(40,200) , name);
+		nameLabel.setColor(0xbbbbbb);
+		nameLabel.setFont(new Font("Verdana", Font.BOLD,24));
+		nameLabel.dropShadow = true;
+		panel.addComponent(nameLabel);
+		uiHealthBar = new UIProgressBar(new Vector2i(40,215), new Vector2i(80*2 - 10 , 20));
+		uiHealthBar.setColor(0x6a6a6a);
+		uiHealthBar.setForegroundColor(new Color(0xdd3030));
+		panel.addComponent(uiHealthBar);
+		
+		UILabel hpLabel = new UILabel(new Vector2i(uiHealthBar.position).add(new Vector2i(2,16)) , "HP");
+		hpLabel.setColor(0xffffff);
+		hpLabel.setFont(new Font("Verdana", Font.PLAIN,16));
+		panel.addComponent(hpLabel);
+		
+		health = 100;
 	}
 	
 	//player spawned at default location
-	public Player(Keyboard input) {
+	public Player(String name, Keyboard input) {
+		this.name = name;
 		this.input = input;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public void update() {
 		
 		// get entities near the player
-		List<Entity> es = level.getEntities(this,20);
+		//List<Entity> es = level.getEntities(this,20);
 		//System.out.println(es.size());
 		//for (Entity e:es) System.out.println(e);
 		
@@ -97,6 +133,7 @@ public class Player extends Mob {
 		
 		clear();
 		updateShooting();
+
 		
 	}
 	
@@ -108,6 +145,7 @@ public class Player extends Mob {
 		
 	}
 
+	int time = 0;
 	private void updateShooting() {
 		// shooting by pressing mouse button
 		if (Mouse.getButton()==1 && fireRate<=0) {
@@ -121,6 +159,10 @@ public class Player extends Mob {
 			shoot(x,y,dir);
 			fireRate = WizardProjectile.FIRE_RATE;
 		}
+		
+		//uiHealthBar.setProgress((time++%100)/100.0);
+		uiHealthBar.setProgress(health);
+
 	}
 	
 	public void render(Screen screen) {
