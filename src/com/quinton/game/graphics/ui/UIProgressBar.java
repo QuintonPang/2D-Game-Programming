@@ -8,7 +8,7 @@ import com.quinton.game.util.Vector2i;
 
 public class UIProgressBar extends UIComponent {
 
-	private Vector2i size;
+	//private Vector2i size;
 	private double progress; // 0.0 to 1.0
 	
 	private Color foregroundColor;

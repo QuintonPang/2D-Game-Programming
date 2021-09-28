@@ -13,6 +13,8 @@ import com.quinton.game.graphics.Screen;
 import com.quinton.game.graphics.Sprite;
 import com.quinton.game.graphics.SpriteSheet;
 import com.quinton.game.graphics.UIManager;
+import com.quinton.game.graphics.ui.UIActionListener;
+import com.quinton.game.graphics.ui.UIButton;
 import com.quinton.game.graphics.ui.UILabel;
 import com.quinton.game.graphics.ui.UIPanel;
 import com.quinton.game.graphics.ui.UIProgressBar;
@@ -41,6 +43,7 @@ public class Player extends Mob {
 	
 	private UIManager ui; 
 	private UIProgressBar uiHealthBar;
+	private UIButton button;
 	
 	private String name;
 	
@@ -74,6 +77,10 @@ public class Player extends Mob {
 		hpLabel.setColor(0xffffff);
 		hpLabel.setFont(new Font("Verdana", Font.PLAIN,16));
 		panel.addComponent(hpLabel);
+		
+		button = new UIButton(new Vector2i(10,260), new Vector2i(120,40), new UIActionListener());
+		button.setText("Play");
+		panel.addComponent(button);
 		
 		health = 100;
 	}

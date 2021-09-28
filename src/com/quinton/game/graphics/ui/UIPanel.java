@@ -29,6 +29,8 @@ public class UIPanel extends UIComponent {
 	}
 	
 	public void addComponent(UIComponent component) {
+		// to tell which panel does each component belongs to
+		component.init(this);
 		components.add(component);
 	}
 	
