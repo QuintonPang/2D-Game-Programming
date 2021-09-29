@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 
 import com.quinton.game.entity.mob.Chaser;
 import com.quinton.game.entity.mob.Dummy;
+import com.quinton.game.entity.mob.Player;
 import com.quinton.game.entity.mob.Shooter;
 import com.quinton.game.entity.mob.Star;
 import com.quinton.game.level.tile.Tile;
@@ -19,6 +20,7 @@ public class SpawnLevel extends Level{
 	public SpawnLevel(String path) {
 			
 		super(path);
+		TileCoordinate playerSpawn = new TileCoordinate(19,42);
 	}
 		
 	protected void loadLevel(String path) {

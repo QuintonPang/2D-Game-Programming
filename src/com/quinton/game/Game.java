@@ -9,16 +9,21 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JFrame;
 
 import com.quinton.game.entity.mob.Player;
+import com.quinton.game.events.Event;
+import com.quinton.game.events.EventListener;
 import com.quinton.game.graphics.Screen;
 import com.quinton.game.graphics.Font;
 import com.quinton.game.graphics.Sprite;
 import com.quinton.game.graphics.SpriteSheet;
 import com.quinton.game.graphics.UIManager;
+import com.quinton.game.graphics.layers.Layer;
 import com.quinton.game.graphics.ui.UIPanel;
 import com.quinton.game.input.Keyboard;
 import com.quinton.game.input.Mouse;
@@ -26,10 +31,14 @@ import com.quinton.game.level.Level;
 import com.quinton.game.level.RandomLevel;
 import com.quinton.game.level.SpawnLevel;
 import com.quinton.game.level.TileCoordinate;
+import com.quinton.game.net.player.NetPlayer;
+import com.thecherno.raincloud.serialization.RCDatabase;
+import com.thecherno.raincloud.serialization.RCField;
+import com.thecherno.raincloud.serialization.RCObject;
 
 
 
-public class Game extends Canvas implements Runnable{
+public class Game extends Canvas implements Runnable, EventListener{
 	
 	
 	
@@ -57,6 +66,8 @@ public class Game extends Canvas implements Runnable{
 	private Font font;
 	
 	private static UIManager uiManager;
+	 
+	private List<Layer> layerStack = new ArrayList<Layer>();
 
 	//  image
 	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -93,6 +104,7 @@ public class Game extends Canvas implements Runnable{
 		// 64 by 64
 		//level = new RandomLevel(64,64);
 		level = Level.spawn;
+		addLayer(level);
 		font = new Font();
 		uiManager = new UIManager();
 		// set spawn location
@@ -100,9 +112,10 @@ public class Game extends Canvas implements Runnable{
 		player = new Player("Quinton",playerSpawn.x(),playerSpawn.y(),key);
 		//player.init(level);
 		level.add(player);
+		level.add(new NetPlayer());
 		addKeyListener(key);
 		
-		Mouse mouse = new Mouse();
+		Mouse mouse = new Mouse(this);
 		
 		// mouse click
 		addMouseListener(mouse);
@@ -110,6 +123,18 @@ public class Game extends Canvas implements Runnable{
 		// location of mouse
 		addMouseMotionListener(mouse);
 				
+		save();
+	}
+	
+	private void save() {
+		RCDatabase db = new RCDatabase("Screen");
+		
+		RCObject obj = new RCObject("Resolution");
+		obj.addField(RCField.Integer("width", width));
+		obj.addField(RCField.Integer("height", height));
+		db.addObject(obj);
+		
+		db.serializeToFile("res/data/screen.bin");
 	}
 	
 	public static int getWindowWidth() {
@@ -123,7 +148,12 @@ public class Game extends Canvas implements Runnable{
 	public static UIManager getUIManager() {
 		return uiManager;
 	}
+	
 
+	public void addLayer(Layer layer) {
+		this.layerStack.add(layer);
+	}
+	
 	//synchronized means it runs individually to prevent interruption
 	
 	public synchronized void start() {
@@ -216,8 +246,14 @@ public class Game extends Canvas implements Runnable{
 		double xScroll = player.getX() - screen.width/2;
 		double yScroll = player.getY() - screen.height/2;
 
+		level.setScroll((int)xScroll, (int)yScroll);
 		
-		level.render((int)xScroll,(int)yScroll, screen);
+		// render layers
+		for(int i = 0;i<layerStack.size();i++) {
+			layerStack.get(i).render(screen);
+		}
+		
+		//level.render(/*(int)xScroll,(int)yScroll,*/ screen);
 		//uiManager.render(screen);
 		//player.render(screen);
 		//screen.renderSheet(40, 40, SpriteSheet.player_down, false);
@@ -285,6 +321,17 @@ public class Game extends Canvas implements Runnable{
 		//player.update();
 		level.update();
 		uiManager.update();
+		
+		// update layers
+		for(int i = 0;i<layerStack.size();i++) {
+			layerStack.get(i).update();
+		}
+	}
+
+	@Override
+	public void onEvent(Event event) {
+		for (int i = layerStack.size()-1;i>=0;i--)
+			layerStack.get(i).onEvent(event);
 	}
 
 }

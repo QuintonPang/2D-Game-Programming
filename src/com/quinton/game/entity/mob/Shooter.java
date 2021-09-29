@@ -98,7 +98,7 @@ public class Shooter extends Mob {
 			
 		if(time%(30 + random.nextInt(91))==0) {
 			int index = random.nextInt(entities.size());
-		
+			
 			rand = entities.get(index);
 			
 		}
@@ -109,7 +109,7 @@ public class Shooter extends Mob {
 		
 		if(entities.size()>0) {
 			//System.out.println(rand);
-			rand = entities.get(0);
+			//rand = entities.get(0);
 			double dx = rand.getX() - x;
 			double dy = rand.getY() - y;
 			double direction = Math.atan2(dy, dx);

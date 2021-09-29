@@ -6,16 +6,19 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.quinton.game.entity.Entity;
+import com.quinton.game.entity.mob.Mob;
 import com.quinton.game.entity.mob.Player;
 import com.quinton.game.entity.particle.Particle;
 import com.quinton.game.entity.projectile.Projectile;
 import com.quinton.game.entity.spawner.ParticleSpawner;
 import com.quinton.game.entity.spawner.Spawner;
+import com.quinton.game.events.Event;
 import com.quinton.game.graphics.Screen;
+import com.quinton.game.graphics.layers.Layer;
 import com.quinton.game.level.tile.Tile;
 import com.quinton.game.util.Vector2i;
 
-public class Level {
+public class Level extends Layer{
 	
 	//protected Tile[] tiles;
 	protected int width, height;
@@ -26,7 +29,11 @@ public class Level {
 	protected List<Entity> entities = new ArrayList<Entity>();
 	private List<Projectile> projectiles = new ArrayList<Projectile>();
 	private List<Particle> particles = new ArrayList<Particle>();
-	private List<Player> players = new ArrayList<Player>();
+	//private List<Player> players = new ArrayList<Player>();
+	
+	private List<Mob> players = new ArrayList<Mob>();
+	
+	private int xScroll, yScroll;
 	
 	// sorter to sort paths
 	private Comparator<Node> nodeSorter = new Comparator<Node>() {
@@ -131,12 +138,18 @@ public class Level {
 	}
 
 	
-	
+	/*
 	private void time() {
 		
 	}
+	*/
 	
-	public void render(int xScroll, int yScroll, Screen screen) {
+	public void setScroll(int xScroll, int yScroll) {
+		this.xScroll = xScroll;
+		this.yScroll = yScroll;
+	}
+	
+	public void render(/*int xScroll, int yScroll,*/ Screen screen) {
 		
 		
 		screen.setOffset(xScroll, yScroll);
@@ -242,17 +255,34 @@ public class Level {
 		
 	}
 	
-	public List<Player>getPlayer() {
+	/*
+	public List<Player>getPlayers() {
+		return players;
+	}
+	*/
+	
+	public List<Mob>getPlayers() {
 		return players;
 	}
 	
+	/*
 	public Player getPlayerAt(int index) {
 		return players.get(index);
 	}
+	*/
 	
+	public Mob getPlayerAt(int index) {
+		return players.get(index);
+	}
+	/*
 	// get first player
 	public Player getClientPlayer() {
 		return players.get(0);
+	}
+	*/
+	
+	public Player getClientPlayer() {
+		return (Player)players.get(0);
 	}
 	
 	// find nearby entities
@@ -279,12 +309,36 @@ public class Level {
 		
 		return result;
 	}
+	/*
 	// find nearby players
 	public List<Player> getPlayers(Entity e, int radius){
 		List<Player> result = new ArrayList<Player>();
 		
 		for (int i =0;i<players.size();i++) {
+			//Player player = players.get(i);
 			Player player = players.get(i);
+			int x = (int)player.getX();
+			int y =(int) player.getY();
+			
+			int ex = (int)e.getX();
+			int ey = (int)e.getY();
+			// get distance from mob to player
+			int dx = Math.abs(x-ex);
+			int dy = Math.abs(y-ey);
+			double dist = Math.sqrt(dx*dx + dy *dy);
+			if (dist<=radius) result.add(player);
+
+		}
+		return result;
+	}
+	*/
+	public List<Mob> getPlayers(Entity e, int radius){
+		//List<Player> result = new ArrayList<Player>();
+		List<Mob> result = new ArrayList<Mob>();
+		
+		for (int i =0;i<players.size();i++) {
+			//Player player = players.get(i);
+			Mob player = players.get(i);
 			int x = (int)player.getX();
 			int y =(int) player.getY();
 			
@@ -376,5 +430,14 @@ public class Level {
 		double distance = Math.sqrt(dx*dx + dy*dy);
 		return distance ==  1 ? 0.95 : 1;
 		//return Math.sqrt(dx*dx + dy*dy);
+	}
+	
+	public void onEvent(Event event) {
+		getClientPlayer().onEvent(event);
+	}
+	
+	public void addPlayer(Mob player) {
+		players.add(player);
+		player.init(this);
 	}
 }

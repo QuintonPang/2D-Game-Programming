@@ -1,8 +1,8 @@
 package com.quinton.game.graphics.ui;
 
-public class UIActionListener {
+public interface UIActionListener {
 
-	public void perform() {
+	public void perform();
 		
-	}
+	
 }
