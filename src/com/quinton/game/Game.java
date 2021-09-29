@@ -70,9 +70,9 @@ public class Game extends Canvas implements Runnable, EventListener{
 	private List<Layer> layerStack = new ArrayList<Layer>();
 
 	//  image
-	private BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+	private BufferedImage image;// = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 	// array of pixels (raster)
-	private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+	private int[] pixels;//= ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 			
 	public static void main(String[] args) {
 		Game game = new Game();
@@ -93,9 +93,11 @@ public class Game extends Canvas implements Runnable, EventListener{
 	//constructor of game
 	public Game() {
 		
+		
+		setSize();
 		//Dimension size = new Dimension(width*scale, height*scale);
-		Dimension size = new Dimension(width*scale + 80 * 3, height*scale);
-		setPreferredSize(size);
+		//Dimension size = new Dimension(width*scale + 80 * 3, height*scale);
+		//setPreferredSize(size);
 				
 		//initialize local variable frame4
 		frame = new JFrame();		
@@ -122,7 +124,7 @@ public class Game extends Canvas implements Runnable, EventListener{
 		
 		// location of mouse
 		addMouseMotionListener(mouse);
-				
+		
 		save();
 	}
 	
@@ -132,9 +134,30 @@ public class Game extends Canvas implements Runnable, EventListener{
 		RCObject obj = new RCObject("Resolution");
 		obj.addField(RCField.Integer("width", width));
 		obj.addField(RCField.Integer("height", height));
+		obj.addField(RCField.Integer("scale", scale));
 		db.addObject(obj);
 		
 		db.serializeToFile("res/data/screen.bin");
+	}
+	
+	private void load() {
+		
+	}
+	
+	private void setSize() {
+		RCDatabase db = RCDatabase.DeserializeFromFile("res/data/screen.bin");
+		if (db != null) {
+			RCObject obj = db.findObject("Resolution");
+			width = obj.findField("width").getInt();
+			height = obj.findField("height").getInt();
+			scale = obj.findField("scale").getInt();
+		}
+	
+		Dimension size = new Dimension(width*scale + 80 * 3, height*scale);
+		setPreferredSize(size);
+		
+		image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 	}
 	
 	public static int getWindowWidth() {

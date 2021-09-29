@@ -47,7 +47,7 @@ public class SpawnLevel extends Level{
 			}
 			
 			
-			//add(new Star(17, 50));
+			add(new Star(17, 50));
 			
 			add(new Chaser(20,55));
 			

@@ -403,7 +403,7 @@ public class Level extends Layer{
 				 if (at == null) continue;
 				 if (at.solid()) continue;
 				 Vector2i a = new Vector2i(x+xi,y+yi);
-				 double gCost = current.gCost + (getDistance(current.tile,a)==1?1:0.95);
+				 double gCost = current.gCost + (getDistance(current.tile,a)==1?1:0.95); // prefers diagonal over straight lines
 				 double hCost = getDistance(a, goal);
 				 Node node = new Node(a, current, gCost, hCost);
 				 if (vecInList(closedList,a) && gCost>=node.gCost) continue;
@@ -427,9 +427,7 @@ public class Level extends Layer{
 	public double getDistance(Vector2i tile, Vector2i goal) {
 		double dx = tile.getX() - goal.getX();
 		double dy = tile.getY() - goal.getY();
-		double distance = Math.sqrt(dx*dx + dy*dy);
-		return distance ==  1 ? 0.95 : 1;
-		//return Math.sqrt(dx*dx + dy*dy);
+		return Math.sqrt(dx*dx + dy*dy);
 	}
 	
 	public void onEvent(Event event) {
