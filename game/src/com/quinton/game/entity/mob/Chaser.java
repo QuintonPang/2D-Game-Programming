@@ -53,14 +53,7 @@ public class Chaser extends Mob {
 		}
 		
 	
-		if (xa!=0||ya!=0) {
-			
-			walking = true;
-			move(xa,ya);
-		} else {
-			walking = false;
-		}
-		
+	
 		
 	}
 
@@ -98,6 +91,6 @@ public class Chaser extends Mob {
 				walking = false;
 			}
 		
-		}
+		}else walking=false; // stops when there is no player around
 	}
 }
